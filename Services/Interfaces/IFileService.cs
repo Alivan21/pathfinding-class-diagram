@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace PathFindingClassDiagram.Services.Interfaces
 {
-    internal interface IFileService
+    public interface IFileService
     {
+        List<string> GetPhpFiles(string directoryPath);
+        void SaveTextOutput(string outputPath, List<string> content);
+
+        void SaveImageOutput(string outputPath, Image image);
     }
 }
