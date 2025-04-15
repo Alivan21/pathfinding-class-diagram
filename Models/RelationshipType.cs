@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PathFindingClassDiagram.Models
+﻿namespace PathFindingClassDiagram.Models
 {
-    internal class RelationshipType
+    public enum RelationshipType
     {
+        Association,
+        Composition,
+        Inheritance,
+        Interface,
     }
 }
