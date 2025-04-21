@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PathFindingClassDiagram.Services.Interfaces;
+using PathFindingClassDiagram.Services;
+using PathFindingClassDiagram.UI;
 
 namespace PathFindingClassDiagram
 {
@@ -16,7 +19,14 @@ namespace PathFindingClassDiagram
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            // Configure services (simple dependency injection)
+            IFileService fileService = new FileService();
+            IExtractorService extractorService = new ExtractorService(fileService);
+            IDiagramService diagramService = new DiagramService();
+
+            // Create and run the main form with injected services
+            Application.Run(new MainForm(fileService, extractorService, diagramService));
         }
     }
 }

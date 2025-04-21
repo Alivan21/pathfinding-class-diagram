@@ -66,4 +66,3 @@ namespace PathFindingClassDiagram.Models
         }
     }
 }
-}
