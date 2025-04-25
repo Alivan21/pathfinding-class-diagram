@@ -197,9 +197,12 @@ namespace PathFindingClassDiagram.Services
             return new ClassDiagram(className, attributes, methods, null);
         }
 
-        public Task<(List<ClassDiagram> ClassDiagrams, List<Relationship> Relationships)> ExtractClassDiagramAsync(List<string> filePaths, int threadCount, IProgress<(int Completed, int Total)> progress = null)
+        public Task<(List<ClassDiagram> ClassDiagrams, List<Relationship> Relationships)> ExtractClassDiagramAsync(
+            List<string> filePaths,
+            int threadCount,
+            IProgress<(int Completed, int Total)> progress = null)
         {
-            throw new NotImplementedException();
+            return ExtractClassDiagramsAsync(filePaths, threadCount, progress);
         }
     }
 }

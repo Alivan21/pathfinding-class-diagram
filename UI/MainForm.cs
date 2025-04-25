@@ -11,6 +11,7 @@ namespace PathFindingClassDiagram.UI
         private readonly IFileService _fileService;
         private readonly IExtractorService _extractorService;
         private readonly IDiagramService _diagramService;
+
         public MainForm(
             IFileService fileService,
             IExtractorService extractorService,
@@ -35,7 +36,6 @@ namespace PathFindingClassDiagram.UI
 
             // Set initial UI state
             output_text.Visible = false;
-            file_location_output.Visible = false;
             output_location.Visible = false;
         }
 
@@ -93,7 +93,6 @@ namespace PathFindingClassDiagram.UI
         {
             _viewModel.Reset();
             output_text.Visible = false;
-            file_location_output.Visible = false;
             output_location.Visible = false;
         }
 
@@ -112,14 +111,24 @@ namespace PathFindingClassDiagram.UI
 
             try
             {
-                // Create a progress reporter
                 var progress = new Progress<(int Completed, int Total)>(p =>
                 {
-                    // Update progress bar or status
                     if (p.Total > 0)
                     {
-                        // You could add a progress bar to the UI
-                        // progressBar.Value = (int)((float)p.Completed / p.Total * 100);
+                        // Check if we're on the UI thread, if not use Invoke
+                        if (InvokeRequired)
+                        {
+                            Invoke(new Action(() => {
+                                // Update the status label or use another method to show progress
+                                // since progressBar doesn't exist
+                                this.Text = $"Processing: {p.Completed}/{p.Total} ({(int)((float)p.Completed / p.Total * 100)}%)";
+                            }));
+                        }
+                        else
+                        {
+                            // Update the status label or use another method to show progress
+                            this.Text = $"Processing: {p.Completed}/{p.Total} ({(int)((float)p.Completed / p.Total * 100)}%)";
+                        }
                     }
                 });
 
@@ -128,7 +137,6 @@ namespace PathFindingClassDiagram.UI
 
                 // Show output information
                 output_text.Visible = true;
-                file_location_output.Visible = true;
                 output_location.Visible = true;
 
                 MessageBox.Show("Extraction completed. Check the output files.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -138,6 +146,7 @@ namespace PathFindingClassDiagram.UI
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void MainForm_Load_1(object sender, EventArgs e)
         {
