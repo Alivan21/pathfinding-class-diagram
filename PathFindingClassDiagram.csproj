@@ -49,6 +49,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\DiagramServiceExtensions.cs" />
+    <Compile Include="Helpers\PathFindingDebuggingHelper.cs" />
+    <Compile Include="Models\ClassInputAdapter.cs" />
+    <Compile Include="Models\Connector.cs" />
+    <Compile Include="Models\ConnectorOrientation.cs" />
+    <Compile Include="Models\IInput.cs" />
+    <Compile Include="Models\Node.cs" />
+    <Compile Include="Models\PathSegment.cs" />
+    <Compile Include="Services\CollisionDetection.cs" />
+    <Compile Include="Services\Interfaces\IPathFindingService.cs" />
+    <Compile Include="Services\PathFindingService.cs" />
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -19,6 +19,7 @@ namespace PathFindingClassDiagram.UI.ViewModels
         private string _directoryPath = string.Empty;
         private string _threadCount = Environment.ProcessorCount.ToString();
         private bool _useRelationships;
+        private bool _usePathfinding = true;
         private string _elapsedTime = string.Empty;
         private string _memoryUsed = string.Empty;
         private string _outputPath = string.Empty;
@@ -51,7 +52,7 @@ namespace PathFindingClassDiagram.UI.ViewModels
             }
         }
 
-        public bool useRelationships
+        public bool UseRelationships
         {
             get => _useRelationships;
             set
@@ -59,6 +60,19 @@ namespace PathFindingClassDiagram.UI.ViewModels
                 if (_useRelationships != value)
                 {
                     _useRelationships = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool UsePathfinding
+        {
+            get => _usePathfinding;
+            set
+            {
+                if (_usePathfinding != value)
+                {
+                    _usePathfinding = value;
                     OnPropertyChanged();
                 }
             }
@@ -143,7 +157,8 @@ namespace PathFindingClassDiagram.UI.ViewModels
         {
             DirectoryPath = string.Empty;
             ThreadCount = Environment.ProcessorCount.ToString();
-            useRelationships = false;
+            UseRelationships = false;
+            UsePathfinding = true;
             ElapsedTime = string.Empty;
             MemoryUsed = string.Empty;
             OutputPath = string.Empty;
@@ -210,14 +225,16 @@ namespace PathFindingClassDiagram.UI.ViewModels
                         threadCount,
                         progressReporter);
 
+                    // Configure pathfinding
+                    _diagramService.SetPathfindingEnabled(UsePathfinding);
+
                     // Generate diagram image
-                    using (Image diagramImage = _diagramService.GenerateClassDiagram(classDiagrams, relationships, useRelationships))
+                    using (Image diagramImage = _diagramService.GenerateClassDiagram(classDiagrams, relationships, UseRelationships))
                     {
                         string outputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Output");
 
-                        if (Directory.Exists(outputDirectory))
+                        if (!Directory.Exists(outputDirectory))
                         {
-                            Directory.Delete(outputDirectory, recursive: true);
                             Directory.CreateDirectory(outputDirectory);
                         }
 
@@ -225,7 +242,7 @@ namespace PathFindingClassDiagram.UI.ViewModels
                         _fileService.SaveImageOutput(Path.Combine(outputDirectory, "ClassDiagrams.jpg"), diagramImage);
 
                         // Update output path
-                        OutputPath = Directory.GetCurrentDirectory();
+                        OutputPath = outputDirectory;
                     }
 
                     // Update performance metrics
@@ -249,6 +266,5 @@ namespace PathFindingClassDiagram.UI.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

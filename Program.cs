@@ -20,7 +20,8 @@ namespace PathFindingClassDiagram
             // Configure services (simple dependency injection)
             IFileService fileService = new FileService();
             IExtractorService extractorService = new ExtractorService(fileService);
-            IDiagramService diagramService = new DiagramService();
+            IPathFindingService pathFindingService = new PathFindingService();
+            IDiagramService diagramService = new DiagramService(pathFindingService);
 
             // Create and run the main form with injected services
             Application.Run(new MainForm(fileService, extractorService, diagramService));
