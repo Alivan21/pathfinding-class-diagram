@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using PathFindingClassDiagram.Helpers;
 using PathFindingClassDiagram.Services.Interfaces;
 using PathFindingClassDiagram.UI.ViewModels;
 
@@ -12,7 +11,6 @@ namespace PathFindingClassDiagram.UI
         private readonly IFileService _fileService;
         private readonly IExtractorService _extractorService;
         private readonly IDiagramService _diagramService;
-        private readonly IPathFindingService _pathFindingService;
 
         public MainForm(
             IFileService fileService,
@@ -25,15 +23,6 @@ namespace PathFindingClassDiagram.UI
             _extractorService = extractorService ?? throw new ArgumentNullException(nameof(extractorService));
             _diagramService = diagramService ?? throw new ArgumentNullException(nameof(diagramService));
 
-            // Get pathfinding service from diagram service if it's been properly injected
-            if (_diagramService is Services.DiagramService ds &&
-                ds.GetType().GetField("_pathFindingService",
-                System.Reflection.BindingFlags.NonPublic |
-                System.Reflection.BindingFlags.Instance)?.GetValue(ds) is IPathFindingService pfs)
-            {
-                _pathFindingService = pfs;
-            }
-
             _viewModel = new MainViewModel(fileService, extractorService, diagramService);
 
             SetupDataBindings();
@@ -44,39 +33,18 @@ namespace PathFindingClassDiagram.UI
             empty_form_button.Click += Empty_form_button_Click;
             generate_button.Click += Generate_button_Click;
             threads_box.KeyPress += Threads_box_KeyPress;
-            pathfindingToggle.CheckedChanged += PathfindingToggle_CheckedChanged;
 
             // Set initial UI state
             output_text.Visible = false;
             output_location.Visible = false;
         }
 
-        private void PathfindingToggle_CheckedChanged(object sender, EventArgs e)
-        {
-            // Directly update the view model property
-            _viewModel.UsePathfinding = pathfindingToggle.Checked;
-
-            // Apply the pathfinding setting directly to the diagram service
-            _diagramService.SetPathfindingEnabled(pathfindingToggle.Checked);
-
-            // Show a message if this is disabled while relationships are enabled
-            if (!pathfindingToggle.Checked && relationshipToggle.Checked)
-            {
-                MessageBox.Show(
-                    "Relationship lines will be drawn directly without pathfinding.",
-                    "Pathfinding Disabled",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
-        }
-
-
         private void SetupDataBindings()
         {
             // Create bindings
             directoryBox.DataBindings.Add("Text", _viewModel, nameof(_viewModel.DirectoryPath), false, DataSourceUpdateMode.OnPropertyChanged);
             threads_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.ThreadCount), false, DataSourceUpdateMode.OnPropertyChanged);
-            relationshipToggle.DataBindings.Add("Checked", _viewModel, nameof(_viewModel.UseRelationships), false, DataSourceUpdateMode.OnPropertyChanged);
+            relationshipToggle.DataBindings.Add("Checked", _viewModel, nameof(_viewModel.useRelationships), false, DataSourceUpdateMode.OnPropertyChanged);
             stopwatch_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.ElapsedTime), false, DataSourceUpdateMode.OnPropertyChanged);
             memory_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.MemoryUsed), false, DataSourceUpdateMode.OnPropertyChanged);
             output_location.DataBindings.Add("Text", _viewModel, nameof(_viewModel.OutputPath), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -97,10 +65,6 @@ namespace PathFindingClassDiagram.UI
         {
             // Initialize the form
             threads_box.Text = Environment.ProcessorCount.ToString();
-
-            // Enable or disable pathfinding toggle based on availability
-            pathfindingToggle.Enabled = _pathFindingService != null;
-            pathfindingToggle.Checked = _pathFindingService != null;
         }
 
         private void Browse_button_Click(object sender, EventArgs e)
@@ -182,6 +146,7 @@ namespace PathFindingClassDiagram.UI
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void MainForm_Load_1(object sender, EventArgs e)
         {
