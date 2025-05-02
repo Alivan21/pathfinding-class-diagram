@@ -32,6 +32,7 @@
             this.output_text = new System.Windows.Forms.Label();
             this.output_location = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.titleLabel = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -142,6 +143,8 @@
             // pathfindingToggle
             // 
             this.pathfindingToggle.AutoSize = true;
+            this.pathfindingToggle.Checked = true;
+            this.pathfindingToggle.CheckState = System.Windows.Forms.CheckState.Checked;
             this.pathfindingToggle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pathfindingToggle.Location = new System.Drawing.Point(20, 260);
             this.pathfindingToggle.Name = "pathfindingToggle";
@@ -199,6 +202,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.progressBar);
             this.panel1.Controls.Add(this.titleLabel);
             this.panel1.Controls.Add(this.file_location_text);
             this.panel1.Controls.Add(this.directoryBox);
@@ -220,6 +224,13 @@
             this.panel1.Padding = new System.Windows.Forms.Padding(20);
             this.panel1.Size = new System.Drawing.Size(660, 460);
             this.panel1.TabIndex = 16;
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(20, 380);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(620, 10);
+            this.progressBar.TabIndex = 16;
             // 
             // titleLabel
             // 
@@ -244,7 +255,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Laravel Controller Extractor";
-            this.Load += new System.EventHandler(this.MainForm_Load_1);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);

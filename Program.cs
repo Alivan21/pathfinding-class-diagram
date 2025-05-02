@@ -17,13 +17,22 @@ namespace PathFindingClassDiagram
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Configure services (simple dependency injection)
-            IFileService fileService = new FileService();
-            IExtractorService extractorService = new ExtractorService(fileService);
-            IDiagramService diagramService = new DiagramService();
+            try
+            {
+                // Configure services (simple dependency injection)
+                IFileService fileService = new FileService();
+                IExtractorService extractorService = new ExtractorService(fileService);
 
-            // Create and run the main form with injected services
-            Application.Run(new MainForm(fileService, extractorService, diagramService));
+                // Create new DiagramService with default pathfinding enabled
+                IDiagramService diagramService = new DiagramService(true);
+
+                // Create and run the main form with injected services
+                Application.Run(new MainForm(fileService, extractorService, diagramService));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

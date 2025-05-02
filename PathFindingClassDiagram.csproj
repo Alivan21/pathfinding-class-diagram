@@ -36,6 +36,9 @@
     <ApplicationIcon>fav.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Bcl.HashCode.6.0.0\lib\net462\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +52,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PathFinding\Models\CollisionDetection.cs" />
+    <Compile Include="PathFinding\Models\Connection.cs" />
+    <Compile Include="PathFinding\Models\Edge.cs" />
+    <Compile Include="PathFinding\Models\Node.cs" />
+    <Compile Include="PathFinding\Models\PathPoint.cs" />
+    <Compile Include="PathFinding\Models\PriorityQueue.cs" />
+    <Compile Include="PathFinding\Models\Rectangle.cs" />
+    <Compile Include="PathFinding\PathfindingAlgorithm.cs" />
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,6 +92,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -33,6 +33,7 @@ namespace PathFindingClassDiagram.UI
             empty_form_button.Click += Empty_form_button_Click;
             generate_button.Click += Generate_button_Click;
             threads_box.KeyPress += Threads_box_KeyPress;
+            pathfindingToggle.CheckedChanged += PathfindingToggle_CheckedChanged;
 
             // Set initial UI state
             output_text.Visible = false;
@@ -45,9 +46,11 @@ namespace PathFindingClassDiagram.UI
             directoryBox.DataBindings.Add("Text", _viewModel, nameof(_viewModel.DirectoryPath), false, DataSourceUpdateMode.OnPropertyChanged);
             threads_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.ThreadCount), false, DataSourceUpdateMode.OnPropertyChanged);
             relationshipToggle.DataBindings.Add("Checked", _viewModel, nameof(_viewModel.useRelationships), false, DataSourceUpdateMode.OnPropertyChanged);
+            pathfindingToggle.DataBindings.Add("Checked", _viewModel, nameof(_viewModel.UsePathfinding), false, DataSourceUpdateMode.OnPropertyChanged);
             stopwatch_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.ElapsedTime), false, DataSourceUpdateMode.OnPropertyChanged);
             memory_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.MemoryUsed), false, DataSourceUpdateMode.OnPropertyChanged);
             output_location.DataBindings.Add("Text", _viewModel, nameof(_viewModel.OutputPath), false, DataSourceUpdateMode.OnPropertyChanged);
+            progressBar.DataBindings.Add("Value", _viewModel, nameof(_viewModel.Progress), false, DataSourceUpdateMode.OnPropertyChanged);
 
             // Subscribe to IsBusy property changed
             _viewModel.PropertyChanged += (sender, e) =>
@@ -57,6 +60,9 @@ namespace PathFindingClassDiagram.UI
                     generate_button.Enabled = !_viewModel.IsBusy;
                     browse_button.Enabled = !_viewModel.IsBusy;
                     empty_form_button.Enabled = !_viewModel.IsBusy;
+                    pathfindingToggle.Enabled = !_viewModel.IsBusy;
+                    relationshipToggle.Enabled = !_viewModel.IsBusy;
+                    threads_box.Enabled = !_viewModel.IsBusy;
                 }
             };
         }
@@ -87,6 +93,14 @@ namespace PathFindingClassDiagram.UI
         }
 
         /// <summary>
+        /// Handles pathfinding toggle changed event
+        /// </summary>
+        private void PathfindingToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            _viewModel.UsePathfinding = pathfindingToggle.Checked;
+        }
+
+        /// <summary>
         /// Handles the empty form button click event
         /// </summary>
         private void Empty_form_button_Click(object sender, EventArgs e)
@@ -111,33 +125,15 @@ namespace PathFindingClassDiagram.UI
 
             try
             {
-                var progress = new Progress<(int Completed, int Total)>(p =>
-                {
-                    if (p.Total > 0)
-                    {
-                        // Check if we're on the UI thread, if not use Invoke
-                        if (InvokeRequired)
-                        {
-                            Invoke(new Action(() => {
-                                // Update the status label or use another method to show progress
-                                // since progressBar doesn't exist
-                                this.Text = $"Processing: {p.Completed}/{p.Total} ({(int)((float)p.Completed / p.Total * 100)}%)";
-                            }));
-                        }
-                        else
-                        {
-                            // Update the status label or use another method to show progress
-                            this.Text = $"Processing: {p.Completed}/{p.Total} ({(int)((float)p.Completed / p.Total * 100)}%)";
-                        }
-                    }
-                });
-
                 // Process the extraction
-                await _viewModel.ProcessAsync(progress);
+                await _viewModel.ProcessAsync();
 
                 // Show output information
                 output_text.Visible = true;
                 output_location.Visible = true;
+
+                // Reset form title
+                this.Text = "Laravel Controller Extractor";
 
                 MessageBox.Show("Extraction completed. Check the output files.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -145,12 +141,6 @@ namespace PathFindingClassDiagram.UI
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-
-        private void MainForm_Load_1(object sender, EventArgs e)
-        {
-
         }
     }
 }
