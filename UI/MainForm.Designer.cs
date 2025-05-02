@@ -33,7 +33,6 @@
             this.output_location = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.titleLabel = new System.Windows.Forms.Label();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -150,7 +149,6 @@
             this.pathfindingToggle.TabIndex = 10;
             this.pathfindingToggle.Text = "Use pathfinding";
             this.pathfindingToggle.UseVisualStyleBackColor = true;
-            this.pathfindingToggle.CheckedChanged += new System.EventHandler(this.PathfindingToggle_CheckedChanged);
             // 
             // empty_form_button
             // 
@@ -201,7 +199,6 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.progressBar);
             this.panel1.Controls.Add(this.titleLabel);
             this.panel1.Controls.Add(this.file_location_text);
             this.panel1.Controls.Add(this.directoryBox);
@@ -233,13 +230,6 @@
             this.titleLabel.Size = new System.Drawing.Size(406, 41);
             this.titleLabel.TabIndex = 15;
             this.titleLabel.Text = "Laravel Controller Extractor";
-            // 
-            // progressBar
-            // 
-            this.progressBar.Location = new System.Drawing.Point(20, 380);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(620, 10);
-            this.progressBar.TabIndex = 16;
             // 
             // MainForm
             // 

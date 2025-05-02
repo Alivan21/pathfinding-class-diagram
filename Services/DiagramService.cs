@@ -6,15 +6,8 @@ using System.Linq;
 
 namespace PathFindingClassDiagram.Services
 {
-    public class DiagramService : IDiagramService
+    public class DiagramService: IDiagramService
     {
-        private readonly IPathFindingService _pathFindingService;
-
-        public DiagramService(IPathFindingService pathFindingService = null)
-        {
-            _pathFindingService = pathFindingService ?? new PathFindingService();
-        }
-
         /// <summary>
         /// Generates a class diagram image
         /// </summary>
@@ -63,7 +56,6 @@ namespace PathFindingClassDiagram.Services
 
             return bitmap;
         }
-
         /// <summary>
         /// Calculates the total height of all class diagrams
         /// </summary>
@@ -82,7 +74,6 @@ namespace PathFindingClassDiagram.Services
         /// </summary>
         private void DrawRelationships(Graphics g, List<Models.ClassDiagram> classDiagrams, List<Models.Relationship> relationships)
         {
-            // Create a dictionary of class diagrams by class name for quick lookup
             Dictionary<string, Models.ClassDiagram> classDiagramDictionary = new Dictionary<string, Models.ClassDiagram>();
             foreach (Models.ClassDiagram classDiagram in classDiagrams)
             {
@@ -90,39 +81,13 @@ namespace PathFindingClassDiagram.Services
                     classDiagramDictionary[classDiagram.ClassName] = classDiagram;
             }
 
-            // Calculate optimal paths for relationships if pathfinding service is available
-            List<Models.PathSegment> pathSegments = _pathFindingService != null
-                ? _pathFindingService.CalculateRelationshipPaths(classDiagrams)
-                : new List<Models.PathSegment>();
-
-            if (pathSegments.Count > 0)
+            foreach (Models.Relationship relationship in relationships)
             {
-                // Draw path segments
-                using (Pen pen = new Pen(Color.Red, 1.5f))
+                if (classDiagramDictionary.TryGetValue(relationship.SourceClass, out var sourceClassDiagram) &&
+                    classDiagramDictionary.TryGetValue(relationship.TargetClass, out var targetClassDiagram))
                 {
-                    foreach (var segment in pathSegments)
-                    {
-                        g.DrawLine(
-                            pen,
-                            (float)segment.Start.X,
-                            (float)segment.Start.Y,
-                            (float)segment.End.X,
-                            (float)segment.End.Y
-                        );
-                    }
-                }
-            }
-            else
-            {
-                // Fall back to original direct-line drawing if no path segments
-                foreach (Models.Relationship relationship in relationships)
-                {
-                    if (classDiagramDictionary.TryGetValue(relationship.SourceClass, out var sourceClassDiagram) &&
-                        classDiagramDictionary.TryGetValue(relationship.TargetClass, out var targetClassDiagram))
-                    {
-                        (PointF source, PointF target) = GetClosestPoints(sourceClassDiagram, targetClassDiagram);
-                        sourceClassDiagram.DrawArrow(g, Pens.Red, source.X, source.Y, target.X, target.Y);
-                    }
+                    (PointF source, PointF target) = GetClosestPoints(sourceClassDiagram, targetClassDiagram);
+                    sourceClassDiagram.DrawArrow(g, Pens.Red, source.X, source.Y, target.X, target.Y);
                 }
             }
         }
