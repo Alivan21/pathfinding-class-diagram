@@ -199,7 +199,6 @@
             this.panel1.Controls.Add(this.stopwatch_box);
             this.panel1.Controls.Add(this.memory_box);
             this.panel1.Controls.Add(this.relationshipToggle);
-            this.panel1.Controls.Add(this.pathfindingToggle);
             this.panel1.Controls.Add(this.output_text);
             this.panel1.Controls.Add(this.output_location);
             this.panel1.Controls.Add(this.empty_form_button);

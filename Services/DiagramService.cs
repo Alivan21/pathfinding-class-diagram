@@ -76,19 +76,16 @@ namespace PathFindingClassDiagram.Services
         /// Draws relationships between classes using Dijkstra's algorithm for path finding
         /// </summary>
         private void DrawRelationships(Graphics g, List<Models.ClassDiagram> classDiagrams,
-            List<Models.Relationship> relationships, int bitmapWidth, int bitmapHeight)
+    List<Models.Relationship> relationships, int bitmapWidth, int bitmapHeight)
         {
-            if (relationships == null || relationships.Count == 0)
-                return;
-
             Dictionary<string, Models.ClassDiagram> classDiagramDictionary = new Dictionary<string, Models.ClassDiagram>();
-            foreach (Models.ClassDiagram classDiagram in classDiagrams)
+            foreach (ClassDiagram classDiagram in classDiagrams)
             {
                 if (!string.IsNullOrEmpty(classDiagram.ClassName))
                     classDiagramDictionary[classDiagram.ClassName] = classDiagram;
             }
 
-            foreach (Models.Relationship relationship in relationships)
+            foreach (Relationship relationship in relationships)
             {
                 if (classDiagramDictionary.TryGetValue(relationship.SourceClass, out var sourceClassDiagram) &&
                     classDiagramDictionary.TryGetValue(relationship.TargetClass, out var targetClassDiagram))
@@ -102,9 +99,12 @@ namespace PathFindingClassDiagram.Services
                         source,
                         target,
                         bitmapWidth,
-                        bitmapHeight);
+                        bitmapHeight,
+                        relationship.SourceClass,
+                        relationship.TargetClass,
+                        5f);
 
-                    // Draw the path with appropriate styling based on relationship type
+                    // Draw the path with appropriate styling
                     DrawConnectorPath(g, relationship.Type, routePoints);
                 }
             }

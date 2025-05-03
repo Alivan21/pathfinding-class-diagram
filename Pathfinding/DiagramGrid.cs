@@ -49,7 +49,10 @@ namespace PathFindingClassDiagram.PathFinding
         /// Mark cells occupied by class diagrams as obstacles.
         /// </summary>
         /// <param name="diagrams">The list of class diagrams to mark as obstacles.</param>
-        public void MarkObstacles(List<ClassDiagram> diagrams)
+        /// <summary>
+        /// Mark cells occupied by class diagrams as obstacles with optional buffer
+        /// </summary>
+        public void MarkObstacles(List<ClassDiagram> diagrams, bool addBuffer = true)
         {
             foreach (var diagram in diagrams)
             {
@@ -72,6 +75,23 @@ namespace PathFindingClassDiagram.PathFinding
                     for (int col = startCol; col <= endCol; col++)
                     {
                         _blockedCells[row, col] = true;
+                    }
+                }
+
+                // Add buffer around obstacle if requested
+                if (addBuffer)
+                {
+                    int buffer = 1; // Buffer size in cells
+                    for (int row = Math.Max(0, startRow - buffer); row <= Math.Min(_rows - 1, endRow + buffer); row++)
+                    {
+                        for (int col = Math.Max(0, startCol - buffer); col <= Math.Min(_cols - 1, endCol + buffer); col++)
+                        {
+                            // Only mark buffer cells if they're not already part of the obstacle
+                            if (row < startRow || row > endRow || col < startCol || col > endCol)
+                            {
+                                _blockedCells[row, col] = true;
+                            }
+                        }
                     }
                 }
             }
