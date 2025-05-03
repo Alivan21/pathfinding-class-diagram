@@ -49,6 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pathfinding\DiagramGrid.cs" />
+    <Compile Include="Pathfinding\DijkstraRouter.cs" />
+    <Compile Include="Pathfinding\PriorityQueue.cs" />
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

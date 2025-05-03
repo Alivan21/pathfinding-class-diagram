@@ -198,5 +198,28 @@ namespace PathFindingClassDiagram.Models
             g.DrawLine(pen, targetX, targetY, arrow1.X, arrow1.Y);
             g.DrawLine(pen, targetX, targetY, arrow2.X, arrow2.Y);
         }
+
+        /// <summary>
+        /// Draws a connector path between points
+        /// </summary>
+        public void DrawConnectorPath(Graphics g, Pen pen, List<PointF> points)
+        {
+            if (points == null || points.Count < 2)
+                return;
+
+            // Draw the line segments
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                g.DrawLine(pen, points[i], points[i + 1]);
+            }
+
+            // Draw the arrowhead
+            float targetX = points[points.Count - 1].X;
+            float targetY = points[points.Count - 1].Y;
+            float sourceX = points[points.Count - 2].X;
+            float sourceY = points[points.Count - 2].Y;
+
+            DrawArrow(g, pen, sourceX, sourceY, targetX, targetY);
+        }
     }
 }
