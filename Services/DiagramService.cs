@@ -75,8 +75,7 @@ namespace PathFindingClassDiagram.Services
         /// <summary>
         /// Draws relationships between classes using Dijkstra's algorithm for path finding
         /// </summary>
-        private void DrawRelationships(Graphics g, List<Models.ClassDiagram> classDiagrams,
-    List<Models.Relationship> relationships, int bitmapWidth, int bitmapHeight)
+        private void DrawRelationships(Graphics g, List<Models.ClassDiagram> classDiagrams, List<Models.Relationship> relationships, int bitmapWidth, int bitmapHeight)
         {
             Dictionary<string, Models.ClassDiagram> classDiagramDictionary = new Dictionary<string, Models.ClassDiagram>();
             foreach (ClassDiagram classDiagram in classDiagrams)

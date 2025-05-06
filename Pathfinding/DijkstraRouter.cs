@@ -17,18 +17,19 @@ namespace PathFindingClassDiagram.PathFinding
             (1, 0), (1, -1), (0, -1), (-1, -1)
         };
 
-        private static Dictionary<(string sourceClass, string targetClass), HashSet<string>> _allowedCrossings =
+        private static readonly Dictionary<(string sourceClass, string targetClass), HashSet<string>> _allowedCrossings =
             new Dictionary<(string sourceClass, string targetClass), HashSet<string>>();
 
         public static List<PointF> Route(
-    List<ClassDiagram> diagrams,
-    PointF start,
-    PointF end,
-    float maxWidth,
-    float maxHeight,
-    string sourceClass,
-    string targetClass,
-    float cellSize = 5f) // Reduced cell size for finer routing
+            List<ClassDiagram> diagrams,
+            PointF start,
+            PointF end,
+            float maxWidth,
+            float maxHeight,
+            string sourceClass,
+            string targetClass,
+            float cellSize = 5f
+        )
         {
             // If this is a pre-existing connection that should cross certain boxes, use direct line
             if (ShouldUseDirectLine(diagrams, start, end, sourceClass, targetClass))
@@ -122,13 +123,15 @@ namespace PathFindingClassDiagram.PathFinding
         /// </summary>
         private static List<PointF> CreateManhattanRoute(PointF start, PointF end)
         {
-            var result = new List<PointF> { start };
+            var result = new List<PointF>
+            {
+                start,
+                // Add intermediate point to create L shape
+                new PointF(end.X, start.Y),
 
-            // Add intermediate point to create L shape
-            result.Add(new PointF(end.X, start.Y));
-
-            // Add end point
-            result.Add(end);
+                // Add end point
+                end
+            };
 
             return result;
         }
@@ -386,46 +389,6 @@ namespace PathFindingClassDiagram.PathFinding
             // Calculate cross product to check collinearity
             double crossProduct = (b.X - a.X) * (c.Y - a.Y) - (c.X - a.X) * (b.Y - a.Y);
             return Math.Abs(crossProduct) < 1e-6;
-        }
-
-        /// <summary>
-        /// Optimizes right angles in the path to create fewer bends.
-        /// </summary>
-        /// <param name="points">The list of points forming the path.</param>
-        /// <returns>An optimized list of points with fewer right angles.</returns>
-        private static List<PointF> OptimizeRightAngles(List<PointF> points)
-        {
-            if (points.Count <= 3)
-                return points;
-
-            var result = new List<PointF>(points);
-
-            for (int i = 0; i < result.Count - 3; i++)
-            {
-                // Only optimize certain patterns of right angles
-                if (IsHorizontalOrVertical(result[i], result[i + 1]) &&
-                    IsHorizontalOrVertical(result[i + 1], result[i + 2]) &&
-                    IsHorizontalOrVertical(result[i + 2], result[i + 3]))
-                {
-                    // Check if we can simplify this pattern
-                    bool horizontal1 = Math.Abs(result[i].Y - result[i + 1].Y) < 1e-6;
-                    bool horizontal2 = Math.Abs(result[i + 1].Y - result[i + 2].Y) < 1e-6;
-                    bool horizontal3 = Math.Abs(result[i + 2].Y - result[i + 3].Y) < 1e-6;
-
-                    // If this forms a zigzag with one segment in the middle
-                    if ((horizontal1 && !horizontal2 && horizontal3) ||
-                        (!horizontal1 && horizontal2 && !horizontal3))
-                    {
-                        // Check if we can eliminate the two middle points
-                        result.RemoveRange(i + 1, 2);
-
-                        // Re-process this segment to catch further optimizations
-                        i--;
-                    }
-                }
-            }
-
-            return result;
         }
 
         /// <summary>

@@ -123,41 +123,5 @@ namespace PathFindingClassDiagram.PathFinding
         /// <returns>A tuple containing the row and column of the cell.</returns>
         public (int Row, int Col) PointToCell(PointF point) =>
             ((int)(point.Y / _cellSize), (int)(point.X / _cellSize));
-
-        /// <summary>
-        /// Creates a margin around obstacles to prevent connectors from being drawn too close to diagram boxes.
-        /// </summary>
-        /// <param name="margin">The number of cells to add as margin.</param>
-        public void AddMarginToObstacles(int margin = 1)
-        {
-            // Create a copy of the current blocked state
-            bool[,] blockedCopy = new bool[_rows, _cols];
-            Array.Copy(_blockedCells, blockedCopy, _blockedCells.Length);
-
-            // Extend obstacles by adding margin
-            for (int row = 0; row < _rows; row++)
-            {
-                for (int col = 0; col < _cols; col++)
-                {
-                    if (blockedCopy[row, col])
-                    {
-                        // Mark surrounding cells within margin as blocked
-                        for (int dRow = -margin; dRow <= margin; dRow++)
-                        {
-                            for (int dCol = -margin; dCol <= margin; dCol++)
-                            {
-                                int newRow = row + dRow;
-                                int newCol = col + dCol;
-
-                                if (newRow >= 0 && newRow < _rows && newCol >= 0 && newCol < _cols)
-                                {
-                                    _blockedCells[newRow, newCol] = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 }
