@@ -45,6 +45,7 @@ namespace PathFindingClassDiagram.UI
             directoryBox.DataBindings.Add("Text", _viewModel, nameof(_viewModel.DirectoryPath), false, DataSourceUpdateMode.OnPropertyChanged);
             threads_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.ThreadCount), false, DataSourceUpdateMode.OnPropertyChanged);
             relationshipToggle.DataBindings.Add("Checked", _viewModel, nameof(_viewModel.useRelationships), false, DataSourceUpdateMode.OnPropertyChanged);
+            pathfindingToggle.DataBindings.Add("Checked", _viewModel, nameof(_viewModel.UsePathfinding), false, DataSourceUpdateMode.OnPropertyChanged);
             stopwatch_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.ElapsedTime), false, DataSourceUpdateMode.OnPropertyChanged);
             memory_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.MemoryUsed), false, DataSourceUpdateMode.OnPropertyChanged);
             output_location.DataBindings.Add("Text", _viewModel, nameof(_viewModel.OutputPath), false, DataSourceUpdateMode.OnPropertyChanged);

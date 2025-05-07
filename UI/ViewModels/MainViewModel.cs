@@ -24,6 +24,19 @@ namespace PathFindingClassDiagram.UI.ViewModels
         private string _outputPath = string.Empty;
         private int _progress;
         private bool _isBusy;
+        private bool _usePathfinding;
+        public bool UsePathfinding
+        {
+            get => _usePathfinding;
+            set
+            {
+                if (_usePathfinding != value)
+                {
+                    _usePathfinding = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public string DirectoryPath
         {
@@ -144,6 +157,7 @@ namespace PathFindingClassDiagram.UI.ViewModels
             DirectoryPath = string.Empty;
             ThreadCount = Environment.ProcessorCount.ToString();
             useRelationships = false;
+            UsePathfinding = false;
             ElapsedTime = string.Empty;
             MemoryUsed = string.Empty;
             OutputPath = string.Empty;
@@ -210,8 +224,9 @@ namespace PathFindingClassDiagram.UI.ViewModels
                         threadCount,
                         progressReporter);
 
-                    // Generate diagram image
-                    using (Image diagramImage = _diagramService.GenerateClassDiagram(classDiagrams, relationships, useRelationships))
+                    // Generate diagram image - pass the UsePathfinding flag
+                    using (Image diagramImage = _diagramService.GenerateClassDiagram(
+                        classDiagrams, relationships, useRelationships, UsePathfinding))
                     {
                         string outputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Output");
 

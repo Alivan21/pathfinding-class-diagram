@@ -8,6 +8,7 @@ namespace PathFindingClassDiagram.Services.Interfaces
         Image GenerateClassDiagram(
             List<Models.ClassDiagram> classDiagrams,
             List<Models.Relationship> relationships,
-            bool showRelationships);
+            bool showRelationships,
+            bool usePathfinding = false);
     }
 }

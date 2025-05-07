@@ -138,6 +138,17 @@
             this.relationshipToggle.TabIndex = 9;
             this.relationshipToggle.Text = "Use relationship";
             this.relationshipToggle.UseVisualStyleBackColor = true;
+            //
+            // pathfindingToggle
+            // 
+            this.pathfindingToggle.AutoSize = true;
+            this.pathfindingToggle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pathfindingToggle.Location = new System.Drawing.Point(20, 260);
+            this.pathfindingToggle.Name = "pathfindingToggle";
+            this.pathfindingToggle.Size = new System.Drawing.Size(136, 24);
+            this.pathfindingToggle.TabIndex = 10;
+            this.pathfindingToggle.Text = "Use pathfinding";
+            this.pathfindingToggle.UseVisualStyleBackColor = true;
             // 
             // empty_form_button
             // 
@@ -199,6 +210,7 @@
             this.panel1.Controls.Add(this.stopwatch_box);
             this.panel1.Controls.Add(this.memory_box);
             this.panel1.Controls.Add(this.relationshipToggle);
+            this.panel1.Controls.Add(this.pathfindingToggle);
             this.panel1.Controls.Add(this.output_text);
             this.panel1.Controls.Add(this.output_location);
             this.panel1.Controls.Add(this.empty_form_button);

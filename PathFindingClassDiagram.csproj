@@ -52,6 +52,9 @@
     <Compile Include="Pathfinding\DiagramGrid.cs" />
     <Compile Include="Pathfinding\DijkstraRouter.cs" />
     <Compile Include="Pathfinding\PriorityQueue.cs" />
+    <Compile Include="Services\DiagramLayouts\PathfindingDiagramLayout.cs" />
+    <Compile Include="Services\DiagramLayouts\StandardDiagramLayout.cs" />
+    <Compile Include="Services\Interfaces\IDiagramLayoutStrategy.cs" />
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
