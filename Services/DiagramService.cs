@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using PathFindingClassDiagram.Models;
 using PathFindingClassDiagram.Services.DiagramLayouts;
 using PathFindingClassDiagram.Services.Interfaces;
 
@@ -37,7 +36,7 @@ namespace PathFindingClassDiagram.Services
             float totalHeight = CalculateTotalHeight(classDiagrams);
             int minBitmapHeight = 800;
             int additionalHeightPerDiagram = 80;
-            int bitmapHeight = (int)Math.Max(minBitmapHeight, totalHeight + (float)(classDiagrams.Count * additionalHeightPerDiagram));
+            int bitmapHeight = (int)Math.Max(minBitmapHeight, totalHeight + classDiagrams.Count * additionalHeightPerDiagram);
 
             Bitmap bitmap = new Bitmap(bitmapWidth, bitmapHeight);
 
@@ -51,10 +50,10 @@ namespace PathFindingClassDiagram.Services
 
                 foreach (Models.ClassDiagram classDiagram in classDiagrams)
                 {
-                    if (xOffset + classDiagram.CalculateTotalWidth(g) > (float)bitmapWidth)
+                    if (xOffset + classDiagram.CalculateTotalWidth(g) > bitmapWidth)
                     {
                         xOffset = 50f;
-                        yOffset += currentRowHeight + (float)additionalHeightPerDiagram;
+                        yOffset += currentRowHeight + additionalHeightPerDiagram;
                         currentRowHeight = 0f;
                     }
 

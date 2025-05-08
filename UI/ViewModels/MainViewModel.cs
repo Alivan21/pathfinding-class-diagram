@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using PathFindingClassDiagram.Helpers;
-using System.IO;
-using System.Threading.Tasks;
-using PathFindingClassDiagram.Services.Interfaces;
-using System.Runtime.CompilerServices;
 using System.Drawing;
+using System.IO;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using PathFindingClassDiagram.Helpers;
+using PathFindingClassDiagram.Services.Interfaces;
 
 namespace PathFindingClassDiagram.UI.ViewModels
 {

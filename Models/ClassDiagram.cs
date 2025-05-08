@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace PathFindingClassDiagram.Models
@@ -95,13 +95,13 @@ namespace PathFindingClassDiagram.Models
             if (Attributes.Count > 0)
             {
                 DrawTextBlock(g, classRect.Left + 10, classRect.Y + 40, Attributes);
-                g.DrawLine(Pens.Black, classRect.X, (float)(classRect.Y + 40) + attributesHeight, classRect.Right, (float)(classRect.Y + 40) + attributesHeight);
+                g.DrawLine(Pens.Black, classRect.X, classRect.Y + 40 + attributesHeight, classRect.Right, classRect.Y + 40 + attributesHeight);
             }
 
             // Draw methods
             if (Methods.Count > 0)
             {
-                float methodsY = (float)(classRect.Y + 40) + attributesHeight + ((Attributes.Count > 0) ? textMargin : 0f);
+                float methodsY = classRect.Y + 40 + attributesHeight + ((Attributes.Count > 0) ? textMargin : 0f);
                 DrawTextBlock(g, classRect.Left + 10, methodsY, Methods);
             }
         }
