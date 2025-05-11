@@ -94,7 +94,7 @@ namespace PathFindingClassDiagram.Models
             // Draw attributes
             if (Attributes.Count > 0)
             {
-                DrawTextBlock(g, classRect.Left + 10, classRect.Y + 40, Attributes);
+                DrawTextBlock(g, classRect.Left + 10, classRect.Y + 40, Attributes, Brushes.Red);
                 g.DrawLine(Pens.Black, classRect.X, classRect.Y + 40 + attributesHeight, classRect.Right, classRect.Y + 40 + attributesHeight);
             }
 
@@ -102,7 +102,7 @@ namespace PathFindingClassDiagram.Models
             if (Methods.Count > 0)
             {
                 float methodsY = classRect.Y + 40 + attributesHeight + ((Attributes.Count > 0) ? textMargin : 0f);
-                DrawTextBlock(g, classRect.Left + 10, methodsY, Methods);
+                DrawTextBlock(g, classRect.Left + 10, methodsY, Methods, Brushes.DarkBlue);
             }
         }
 
@@ -128,14 +128,14 @@ namespace PathFindingClassDiagram.Models
         /// <summary>
         /// Draws a block of text at the specified location
         /// </summary>
-        public void DrawTextBlock(Graphics g, float x, float y, List<string> textBlock)
+        public void DrawTextBlock(Graphics g, float x, float y, List<string> textBlock, Brush textColor, bool isMethodBlock = false)
         {
             if (g == null || textBlock == null || textBlock.Count == 0)
                 return;
 
             for (int i = 0; i < textBlock.Count; i++)
             {
-                g.DrawString(textBlock[i], new Font("Arial", 10f), Brushes.Black, x, y);
+                g.DrawString(textBlock[i], new Font("Arial", 10f), textColor, x, y);
                 y += g.MeasureString(textBlock[i], new Font("Arial", 10f)).Height;
 
                 if (i < textBlock.Count - 1)

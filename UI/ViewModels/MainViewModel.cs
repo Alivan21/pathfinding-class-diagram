@@ -64,7 +64,7 @@ namespace PathFindingClassDiagram.UI.ViewModels
             }
         }
 
-        public bool useRelationships
+        public bool UseRelationships
         {
             get => _useRelationships;
             set
@@ -156,7 +156,7 @@ namespace PathFindingClassDiagram.UI.ViewModels
         {
             DirectoryPath = string.Empty;
             ThreadCount = Environment.ProcessorCount.ToString();
-            useRelationships = false;
+            UseRelationships = false;
             UsePathfinding = false;
             ElapsedTime = string.Empty;
             MemoryUsed = string.Empty;
@@ -226,7 +226,7 @@ namespace PathFindingClassDiagram.UI.ViewModels
 
                     // Generate diagram image - pass the UsePathfinding flag
                     using (Image diagramImage = _diagramService.GenerateClassDiagram(
-                        classDiagrams, relationships, useRelationships, UsePathfinding))
+                        classDiagrams, relationships, UseRelationships, UsePathfinding))
                     {
                         string outputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Output");
 

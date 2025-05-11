@@ -28,7 +28,7 @@ namespace PathFindingClassDiagram.PathFinding
             float maxHeight,
             string sourceClass,
             string targetClass,
-            float cellSize = 5f
+            float cellSize = 10f
         )
         {
             // If this is a pre-existing connection that should cross certain boxes, use direct line
