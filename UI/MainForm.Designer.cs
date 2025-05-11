@@ -138,7 +138,7 @@
             this.relationshipToggle.TabIndex = 9;
             this.relationshipToggle.Text = "Use relationship";
             this.relationshipToggle.UseVisualStyleBackColor = true;
-            //
+            // 
             // pathfindingToggle
             // 
             this.pathfindingToggle.AutoSize = true;
@@ -165,7 +165,7 @@
             // generate_button
             // 
             this.generate_button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            this.generate_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.generate_button.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.generate_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.generate_button.ForeColor = System.Drawing.Color.White;
             this.generate_button.Location = new System.Drawing.Point(536, 397);

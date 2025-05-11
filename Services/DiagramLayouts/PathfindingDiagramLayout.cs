@@ -91,8 +91,6 @@ namespace PathFindingClassDiagram.Services.DiagramLayouts
             else
                 return new PointF(Math.Min(Math.Max(box.Left, point.X), box.Right), box.Bottom);
         }
-
-        // Include other helper methods...
         private (PointF, PointF) GetClosestPoints(ClassDiagram source, ClassDiagram target)
         {
             double minDistance = double.MaxValue;
