@@ -28,7 +28,7 @@ namespace PathFindingClassDiagram.PathFinding
             float maxHeight,
             string sourceClass,
             string targetClass,
-            float cellSize = 10f
+            float cellSize = 5f
         )
         {
             // If this is a pre-existing connection that should cross certain boxes, use direct line
@@ -235,8 +235,10 @@ namespace PathFindingClassDiagram.PathFinding
             if (points.Count <= 2)
                 return points;
 
-            var result = new List<PointF>();
-            result.Add(points[0]);
+            var result = new List<PointF>
+            {
+                points[0]
+            };
 
             // Process internal points to create smoother turns
             for (int i = 1; i < points.Count - 1; i++)
@@ -330,7 +332,7 @@ namespace PathFindingClassDiagram.PathFinding
                         continue;
 
                     // Calculate movement cost (diagonal is slightly more expensive)
-                    double moveCost = (Math.Abs(dRow) + Math.Abs(dCol) == 2) ? 1.414 : 1.0;
+                    double moveCost = (Math.Abs(dRow) + Math.Abs(dCol) == 2) ? 1.5 : 1.0;
                     var newCost = costSoFar[current] + moveCost;
 
                     // If this path to next is better than any previous one

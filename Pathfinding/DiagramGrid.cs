@@ -22,7 +22,7 @@ namespace PathFindingClassDiagram.PathFinding
         /// <param name="width">The width of the diagram area.</param>
         /// <param name="height">The height of the diagram area.</param>
         /// <param name="cellSize">The size of each grid cell (smaller = more detailed routing, but slower).</param>
-        public DiagramGrid(float width, float height, float cellSize = 10f)
+        public DiagramGrid(float width, float height, float cellSize = 5f)
         {
             _cellSize = cellSize;
             _rows = (int)(height / cellSize) + 1;

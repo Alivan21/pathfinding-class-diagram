@@ -34,8 +34,8 @@ namespace PathFindingClassDiagram.Services
             int bitmapWidth = (int)Math.Max(Math.Max(1600f, maxDiagramWidth + 100f), maxDiagramWidth);
 
             float totalHeight = CalculateTotalHeight(classDiagrams);
-            int minBitmapHeight = 800;
-            int additionalHeightPerDiagram = 80;
+            int minBitmapHeight = 640;
+            int additionalHeightPerDiagram = 96;
             int bitmapHeight = (int)Math.Max(minBitmapHeight, totalHeight + classDiagrams.Count * additionalHeightPerDiagram);
 
             Bitmap bitmap = new Bitmap(bitmapWidth, bitmapHeight);
@@ -58,7 +58,7 @@ namespace PathFindingClassDiagram.Services
                     }
 
                     classDiagram.Draw(g, xOffset, yOffset, classDiagrams);
-                    xOffset += classDiagram.CalculateTotalWidth(g) + 50f;
+                    xOffset += classDiagram.CalculateTotalWidth(g) + 54f;
                     currentRowHeight = Math.Max(currentRowHeight, classDiagram.CalculateTotalHeight(g));
                 }
 

@@ -122,7 +122,6 @@ namespace PathFindingClassDiagram.UI
                             Invoke(new Action(() =>
                             {
                                 // Update the status label or use another method to show progress
-                                // since progressBar doesn't exist
                                 this.Text = $"Processing: {p.Completed}/{p.Total} ({(int)((float)p.Completed / p.Total * 100)}%)";
                             }));
                         }

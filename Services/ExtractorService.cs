@@ -94,7 +94,7 @@ namespace PathFindingClassDiagram.Services
             MatchCollection attributeMatches = Regex.Matches(fileContent, @"protected\s+\$(\w+)|private\s+\$(\w+)|public\s+\$(\w+)");
             foreach (Match attributeMatch in attributeMatches)
             {
-                string accessModifier = "";
+                string accessModifier;
                 if (attributeMatch.Groups[1].Success)
                 {
                     accessModifier = "#";
@@ -143,7 +143,6 @@ namespace PathFindingClassDiagram.Services
                 extractedInfo.Add($"Method: {accessModifier} {methodName}({methodParamsString})");
             }
 
-            // Save extracted info to file
             string outputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Output");
             if (!Directory.Exists(outputDirectory))
             {

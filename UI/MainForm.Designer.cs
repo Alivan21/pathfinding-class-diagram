@@ -253,7 +253,6 @@
 
         private System.Windows.Forms.Label file_location_text;
         private System.Windows.Forms.TextBox directoryBox;
-        private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Button browse_button;
         private System.Windows.Forms.Label threads_text;
         private System.Windows.Forms.Label stopwatch_text;
