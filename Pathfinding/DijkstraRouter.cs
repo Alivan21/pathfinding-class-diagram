@@ -392,16 +392,5 @@ namespace PathFindingClassDiagram.PathFinding
             double crossProduct = (b.X - a.X) * (c.Y - a.Y) - (c.X - a.X) * (b.Y - a.Y);
             return Math.Abs(crossProduct) < 1e-6;
         }
-
-        /// <summary>
-        /// Checks if the line segment between two points is horizontal or vertical.
-        /// </summary>
-        /// <param name="a">The first point.</param>
-        /// <param name="b">The second point.</param>
-        /// <returns>True if the segment is horizontal or vertical, false otherwise.</returns>
-        private static bool IsHorizontalOrVertical(PointF a, PointF b)
-        {
-            return Math.Abs(a.X - b.X) < 1e-6 || Math.Abs(a.Y - b.Y) < 1e-6;
-        }
     }
 }
