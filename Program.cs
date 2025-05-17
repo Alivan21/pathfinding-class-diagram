@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using PathFindingClassDiagram.Services.Interfaces;
 using PathFindingClassDiagram.Services;
+using PathFindingClassDiagram.Services.Interfaces;
 using PathFindingClassDiagram.UI;
 
 namespace PathFindingClassDiagram

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using PathFindingClassDiagram.Helpers;
-using System.IO;
-using System.Threading.Tasks;
-using PathFindingClassDiagram.Services.Interfaces;
-using System.Runtime.CompilerServices;
 using System.Drawing;
+using System.IO;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using PathFindingClassDiagram.Helpers;
+using PathFindingClassDiagram.Services.Interfaces;
 
 namespace PathFindingClassDiagram.UI.ViewModels
 {
@@ -24,6 +24,33 @@ namespace PathFindingClassDiagram.UI.ViewModels
         private string _outputPath = string.Empty;
         private int _progress;
         private bool _isBusy;
+        private bool _usePathfinding;
+        private float _cellSize = 5f;
+        public bool UsePathfinding
+        {
+            get => _usePathfinding;
+            set
+            {
+                if (_usePathfinding != value)
+                {
+                    _usePathfinding = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public float CellSize
+        {
+            get => _cellSize;
+            set
+            {
+                if (_cellSize != value)
+                {
+                    _cellSize = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public string DirectoryPath
         {
@@ -51,7 +78,7 @@ namespace PathFindingClassDiagram.UI.ViewModels
             }
         }
 
-        public bool useRelationships
+        public bool UseRelationships
         {
             get => _useRelationships;
             set
@@ -143,12 +170,14 @@ namespace PathFindingClassDiagram.UI.ViewModels
         {
             DirectoryPath = string.Empty;
             ThreadCount = Environment.ProcessorCount.ToString();
-            useRelationships = false;
+            UseRelationships = false;
+            UsePathfinding = false;
             ElapsedTime = string.Empty;
             MemoryUsed = string.Empty;
             OutputPath = string.Empty;
             Progress = 0;
             IsBusy = false;
+            CellSize = 5f;
         }
 
         public (bool isValid, string ErrorMessage) ValidateInput()
@@ -210,8 +239,9 @@ namespace PathFindingClassDiagram.UI.ViewModels
                         threadCount,
                         progressReporter);
 
-                    // Generate diagram image
-                    using (Image diagramImage = _diagramService.GenerateClassDiagram(classDiagrams, relationships, useRelationships))
+                    // Generate diagram image - pass the UsePathfinding flag
+                    using (Image diagramImage = _diagramService.GenerateClassDiagram(
+                        classDiagrams, relationships, UseRelationships, UsePathfinding, CellSize))
                     {
                         string outputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Output");
 

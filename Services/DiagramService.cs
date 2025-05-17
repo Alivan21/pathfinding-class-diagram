@@ -1,28 +1,46 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿// Services/DiagramService.cs
 using System;
-using PathFindingClassDiagram.Services.Interfaces;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using PathFindingClassDiagram.Services.DiagramLayouts;
+using PathFindingClassDiagram.Services.Interfaces;
 
 namespace PathFindingClassDiagram.Services
 {
-    public class DiagramService: IDiagramService
+    public class DiagramService : IDiagramService
     {
+        private readonly IDiagramLayoutStrategy _standardLayout;
+        private readonly IDiagramLayoutStrategy _pathfindingLayout;
+
+        // Add properties for cell size and buffer
+        public float CellSize { get; set; } = 5f;
+
+        public DiagramService()
+        {
+            _standardLayout = new StandardDiagramLayout();
+            _pathfindingLayout = new PathfindingDiagramLayout();
+        }
+
         /// <summary>
         /// Generates a class diagram image
         /// </summary>
-        public Image GenerateClassDiagram(
+        public Image GenerateClassDiagram
+        (
             List<Models.ClassDiagram> classDiagrams,
             List<Models.Relationship> relationships,
-            bool showRelationships)
+            bool showRelationships,
+            bool usePathfinding = false,
+            float cellSize = 5f
+        )
         {
             float maxDiagramWidth = classDiagrams.Max(diagram => diagram.CalculateTotalWidth(null));
             int bitmapWidth = (int)Math.Max(Math.Max(1600f, maxDiagramWidth + 100f), maxDiagramWidth);
 
             float totalHeight = CalculateTotalHeight(classDiagrams);
-            int minBitmapHeight = 800;
-            int additionalHeightPerDiagram = 80;
-            int bitmapHeight = (int)Math.Max(minBitmapHeight, totalHeight + (float)(classDiagrams.Count * additionalHeightPerDiagram));
+            int minBitmapHeight = 640;
+            int additionalHeightPerDiagram = 76;
+            int bitmapHeight = (int)Math.Max(minBitmapHeight, totalHeight + classDiagrams.Count * additionalHeightPerDiagram);
 
             Bitmap bitmap = new Bitmap(bitmapWidth, bitmapHeight);
 
@@ -36,26 +54,33 @@ namespace PathFindingClassDiagram.Services
 
                 foreach (Models.ClassDiagram classDiagram in classDiagrams)
                 {
-                    if (xOffset + classDiagram.CalculateTotalWidth(g) > (float)bitmapWidth)
+                    if (xOffset + classDiagram.CalculateTotalWidth(g) > bitmapWidth)
                     {
                         xOffset = 50f;
-                        yOffset += currentRowHeight + (float)additionalHeightPerDiagram;
+                        yOffset += currentRowHeight + additionalHeightPerDiagram;
                         currentRowHeight = 0f;
                     }
 
                     classDiagram.Draw(g, xOffset, yOffset, classDiagrams);
-                    xOffset += classDiagram.CalculateTotalWidth(g) + 50f;
+                    xOffset += classDiagram.CalculateTotalWidth(g) + 54f;
                     currentRowHeight = Math.Max(currentRowHeight, classDiagram.CalculateTotalHeight(g));
                 }
 
                 if (showRelationships)
                 {
-                    DrawRelationships(g, classDiagrams, relationships);
+                    // Choose the strategy based on the usePathfinding flag
+                    IDiagramLayoutStrategy layoutStrategy = usePathfinding
+                        ? _pathfindingLayout
+                        : _standardLayout;
+
+                    // Draw relationships using the selected strategy
+                    layoutStrategy.DrawRelationships(g, classDiagrams, relationships, bitmapWidth, bitmapHeight, cellSize);
                 }
             }
 
             return bitmap;
         }
+
         /// <summary>
         /// Calculates the total height of all class diagrams
         /// </summary>
@@ -67,87 +92,6 @@ namespace PathFindingClassDiagram.Services
                 totalHeight += classDiagram.CalculateTotalHeight(null);
             }
             return totalHeight;
-        }
-
-        /// <summary>
-        /// Draws relationships between classes
-        /// </summary>
-        private void DrawRelationships(Graphics g, List<Models.ClassDiagram> classDiagrams, List<Models.Relationship> relationships)
-        {
-            Dictionary<string, Models.ClassDiagram> classDiagramDictionary = new Dictionary<string, Models.ClassDiagram>();
-            foreach (Models.ClassDiagram classDiagram in classDiagrams)
-            {
-                if (!string.IsNullOrEmpty(classDiagram.ClassName))
-                    classDiagramDictionary[classDiagram.ClassName] = classDiagram;
-            }
-
-            foreach (Models.Relationship relationship in relationships)
-            {
-                if (classDiagramDictionary.TryGetValue(relationship.SourceClass, out var sourceClassDiagram) &&
-                    classDiagramDictionary.TryGetValue(relationship.TargetClass, out var targetClassDiagram))
-                {
-                    (PointF source, PointF target) = GetClosestPoints(sourceClassDiagram, targetClassDiagram);
-                    sourceClassDiagram.DrawArrow(g, Pens.Red, source.X, source.Y, target.X, target.Y);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the closest points between two class diagrams
-        /// </summary>
-        private (PointF, PointF) GetClosestPoints(Models.ClassDiagram source, Models.ClassDiagram target)
-        {
-            double minDistance = double.MaxValue;
-            PointF closestSourcePoint = PointF.Empty;
-            PointF closestTargetPoint = PointF.Empty;
-
-            foreach (Models.ClassDiagramPoint sourcePoint in source.Points)
-            {
-                foreach (Models.ClassDiagramPoint targetPoint in target.Points)
-                {
-                    // Check all possible point combinations
-                    PointF[] sourcePoints = {
-                            sourcePoint.TopLeft,
-                            sourcePoint.TopRight,
-                            sourcePoint.BottomLeft,
-                            sourcePoint.BottomRight
-                        };
-
-                    PointF[] targetPoints = {
-                            targetPoint.TopLeft,
-                            targetPoint.TopRight,
-                            targetPoint.BottomLeft,
-                            targetPoint.BottomRight
-                        };
-
-                    for (int i = 0; i < sourcePoints.Length; i++)
-                    {
-                        for (int j = 0; j < targetPoints.Length; j++)
-                        {
-                            double distance = CalculateDistance(sourcePoints[i], targetPoints[j]);
-
-                            if (distance < minDistance)
-                            {
-                                minDistance = distance;
-                                closestSourcePoint = sourcePoints[i];
-                                closestTargetPoint = targetPoints[j];
-                            }
-                        }
-                    }
-                }
-            }
-
-            return (closestSourcePoint, closestTargetPoint);
-        }
-
-        /// <summary>
-        /// Calculates the distance between two points
-        /// </summary>
-        private double CalculateDistance(PointF point1, PointF point2)
-        {
-            double deltaX = point2.X - point1.X;
-            double deltaY = point2.Y - point1.Y;
-            return Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
         }
     }
 }

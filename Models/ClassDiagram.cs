@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace PathFindingClassDiagram.Models
@@ -94,15 +94,15 @@ namespace PathFindingClassDiagram.Models
             // Draw attributes
             if (Attributes.Count > 0)
             {
-                DrawTextBlock(g, classRect.Left + 10, classRect.Y + 40, Attributes);
-                g.DrawLine(Pens.Black, classRect.X, (float)(classRect.Y + 40) + attributesHeight, classRect.Right, (float)(classRect.Y + 40) + attributesHeight);
+                DrawTextBlock(g, classRect.Left + 10, classRect.Y + 40, Attributes, Brushes.Red);
+                g.DrawLine(Pens.Black, classRect.X, classRect.Y + 40 + attributesHeight, classRect.Right, classRect.Y + 40 + attributesHeight);
             }
 
             // Draw methods
             if (Methods.Count > 0)
             {
-                float methodsY = (float)(classRect.Y + 40) + attributesHeight + ((Attributes.Count > 0) ? textMargin : 0f);
-                DrawTextBlock(g, classRect.Left + 10, methodsY, Methods);
+                float methodsY = classRect.Y + 40 + attributesHeight + ((Attributes.Count > 0) ? textMargin : 0f);
+                DrawTextBlock(g, classRect.Left + 10, methodsY, Methods, Brushes.DarkBlue);
             }
         }
 
@@ -128,14 +128,14 @@ namespace PathFindingClassDiagram.Models
         /// <summary>
         /// Draws a block of text at the specified location
         /// </summary>
-        public void DrawTextBlock(Graphics g, float x, float y, List<string> textBlock)
+        public void DrawTextBlock(Graphics g, float x, float y, List<string> textBlock, Brush textColor, bool isMethodBlock = false)
         {
             if (g == null || textBlock == null || textBlock.Count == 0)
                 return;
 
             for (int i = 0; i < textBlock.Count; i++)
             {
-                g.DrawString(textBlock[i], new Font("Arial", 10f), Brushes.Black, x, y);
+                g.DrawString(textBlock[i], new Font("Arial", 10f), textColor, x, y);
                 y += g.MeasureString(textBlock[i], new Font("Arial", 10f)).Height;
 
                 if (i < textBlock.Count - 1)
@@ -197,6 +197,29 @@ namespace PathFindingClassDiagram.Models
 
             g.DrawLine(pen, targetX, targetY, arrow1.X, arrow1.Y);
             g.DrawLine(pen, targetX, targetY, arrow2.X, arrow2.Y);
+        }
+
+        /// <summary>
+        /// Draws a connector path between points
+        /// </summary>
+        public void DrawConnectorPath(Graphics g, Pen pen, List<PointF> points)
+        {
+            if (points == null || points.Count < 2)
+                return;
+
+            // Draw the line segments
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                g.DrawLine(pen, points[i], points[i + 1]);
+            }
+
+            // Draw the arrowhead
+            float targetX = points[points.Count - 1].X;
+            float targetY = points[points.Count - 1].Y;
+            float sourceX = points[points.Count - 2].X;
+            float sourceY = points[points.Count - 2].Y;
+
+            DrawArrow(g, pen, sourceX, sourceY, targetX, targetY);
         }
     }
 }

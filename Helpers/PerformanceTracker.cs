@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace PathFindingClassDiagram.Helpers
 {
-    public class PerformanceTracker: IDisposable
+    public class PerformanceTracker : IDisposable
     {
         private readonly Stopwatch _stopwatch;
         private readonly long _memoryBefore;

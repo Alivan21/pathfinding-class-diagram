@@ -44,10 +44,12 @@ namespace PathFindingClassDiagram.UI
             // Create bindings
             directoryBox.DataBindings.Add("Text", _viewModel, nameof(_viewModel.DirectoryPath), false, DataSourceUpdateMode.OnPropertyChanged);
             threads_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.ThreadCount), false, DataSourceUpdateMode.OnPropertyChanged);
-            relationshipToggle.DataBindings.Add("Checked", _viewModel, nameof(_viewModel.useRelationships), false, DataSourceUpdateMode.OnPropertyChanged);
+            relationshipToggle.DataBindings.Add("Checked", _viewModel, nameof(_viewModel.UseRelationships), false, DataSourceUpdateMode.OnPropertyChanged);
+            pathfindingToggle.DataBindings.Add("Checked", _viewModel, nameof(_viewModel.UsePathfinding), false, DataSourceUpdateMode.OnPropertyChanged);
             stopwatch_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.ElapsedTime), false, DataSourceUpdateMode.OnPropertyChanged);
             memory_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.MemoryUsed), false, DataSourceUpdateMode.OnPropertyChanged);
             output_location.DataBindings.Add("Text", _viewModel, nameof(_viewModel.OutputPath), false, DataSourceUpdateMode.OnPropertyChanged);
+            cellSize_box.DataBindings.Add("Text", _viewModel, nameof(_viewModel.CellSize), false, DataSourceUpdateMode.OnPropertyChanged);
 
             // Subscribe to IsBusy property changed
             _viewModel.PropertyChanged += (sender, e) =>
@@ -57,6 +59,11 @@ namespace PathFindingClassDiagram.UI
                     generate_button.Enabled = !_viewModel.IsBusy;
                     browse_button.Enabled = !_viewModel.IsBusy;
                     empty_form_button.Enabled = !_viewModel.IsBusy;
+                }
+                else if (e.PropertyName == nameof(_viewModel.UsePathfinding))
+                {
+                    cellSize_text.Visible = _viewModel.UsePathfinding;
+                    cellSize_box.Visible = _viewModel.UsePathfinding;
                 }
             };
         }
@@ -76,6 +83,14 @@ namespace PathFindingClassDiagram.UI
                     _viewModel.DirectoryPath = dialog.SelectedPath;
                 }
             }
+        }
+
+        /// <summary>
+        /// Validates cell size box input to only allow digits
+        /// </summary>
+        private void CellSize_box_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
         }
 
         /// <summary>
@@ -118,9 +133,9 @@ namespace PathFindingClassDiagram.UI
                         // Check if we're on the UI thread, if not use Invoke
                         if (InvokeRequired)
                         {
-                            Invoke(new Action(() => {
+                            Invoke(new Action(() =>
+                            {
                                 // Update the status label or use another method to show progress
-                                // since progressBar doesn't exist
                                 this.Text = $"Processing: {p.Completed}/{p.Total} ({(int)((float)p.Completed / p.Total * 100)}%)";
                             }));
                         }

@@ -7,7 +7,7 @@ using PathFindingClassDiagram.Services.Interfaces;
 
 namespace PathFindingClassDiagram.Services
 {
-    public class FileService: IFileService
+    public class FileService : IFileService
     {
         public List<string> GetPhpFiles(string directoryPath)
         {
