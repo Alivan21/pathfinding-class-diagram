@@ -9,6 +9,8 @@ namespace PathFindingClassDiagram.Services.Interfaces
             List<Models.ClassDiagram> classDiagrams,
             List<Models.Relationship> relationships,
             bool showRelationships,
-            bool usePathfinding = false);
+            bool usePathfinding = false,
+            float cellSize = 5f
+            );
     }
 }

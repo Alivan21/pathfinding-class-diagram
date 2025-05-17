@@ -25,6 +25,7 @@ namespace PathFindingClassDiagram.UI.ViewModels
         private int _progress;
         private bool _isBusy;
         private bool _usePathfinding;
+        private float _cellSize = 5f;
         public bool UsePathfinding
         {
             get => _usePathfinding;
@@ -33,6 +34,19 @@ namespace PathFindingClassDiagram.UI.ViewModels
                 if (_usePathfinding != value)
                 {
                     _usePathfinding = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public float CellSize
+        {
+            get => _cellSize;
+            set
+            {
+                if (_cellSize != value)
+                {
+                    _cellSize = value;
                     OnPropertyChanged();
                 }
             }
@@ -163,6 +177,7 @@ namespace PathFindingClassDiagram.UI.ViewModels
             OutputPath = string.Empty;
             Progress = 0;
             IsBusy = false;
+            CellSize = 5f;
         }
 
         public (bool isValid, string ErrorMessage) ValidateInput()
@@ -226,7 +241,7 @@ namespace PathFindingClassDiagram.UI.ViewModels
 
                     // Generate diagram image - pass the UsePathfinding flag
                     using (Image diagramImage = _diagramService.GenerateClassDiagram(
-                        classDiagrams, relationships, UseRelationships, UsePathfinding))
+                        classDiagrams, relationships, UseRelationships, UsePathfinding, CellSize))
                     {
                         string outputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Output");
 

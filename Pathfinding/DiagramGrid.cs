@@ -81,7 +81,7 @@ namespace PathFindingClassDiagram.PathFinding
                 // Add buffer around obstacle if requested
                 if (addBuffer)
                 {
-                    int buffer = 1; // Buffer size in cells
+                    int buffer = 2; // Buffer size in cells
                     for (int row = Math.Max(0, startRow - buffer); row <= Math.Min(_rows - 1, endRow + buffer); row++)
                     {
                         for (int col = Math.Max(0, startCol - buffer); col <= Math.Min(_cols - 1, endCol + buffer); col++)

@@ -27,6 +27,8 @@
             this.memory_box = new System.Windows.Forms.TextBox();
             this.relationshipToggle = new System.Windows.Forms.CheckBox();
             this.pathfindingToggle = new System.Windows.Forms.CheckBox();
+            this.cellSize_text = new System.Windows.Forms.Label();
+            this.cellSize_box = new System.Windows.Forms.TextBox();
             this.empty_form_button = new System.Windows.Forms.Button();
             this.generate_button = new System.Windows.Forms.Button();
             this.output_text = new System.Windows.Forms.Label();
@@ -150,6 +152,27 @@
             this.pathfindingToggle.Text = "Use pathfinding";
             this.pathfindingToggle.UseVisualStyleBackColor = true;
             // 
+            // cellSize_text
+            // 
+            this.cellSize_text.AutoSize = true;
+            this.cellSize_text.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cellSize_text.Location = new System.Drawing.Point(246, 227);
+            this.cellSize_text.Name = "cellSize_text";
+            this.cellSize_text.Size = new System.Drawing.Size(73, 23);
+            this.cellSize_text.TabIndex = 16;
+            this.cellSize_text.Text = "Cell Size";
+            this.cellSize_text.Visible = false;
+            // 
+            // cellSize_box
+            // 
+            this.cellSize_box.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cellSize_box.Location = new System.Drawing.Point(326, 227);
+            this.cellSize_box.Name = "cellSize_box";
+            this.cellSize_box.Size = new System.Drawing.Size(60, 27);
+            this.cellSize_box.TabIndex = 17;
+            this.cellSize_box.Text = "5";
+            this.cellSize_box.Visible = false;
+            // 
             // empty_form_button
             // 
             this.empty_form_button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -211,6 +234,8 @@
             this.panel1.Controls.Add(this.memory_box);
             this.panel1.Controls.Add(this.relationshipToggle);
             this.panel1.Controls.Add(this.pathfindingToggle);
+            this.panel1.Controls.Add(this.cellSize_text);
+            this.panel1.Controls.Add(this.cellSize_box);
             this.panel1.Controls.Add(this.output_text);
             this.panel1.Controls.Add(this.output_location);
             this.panel1.Controls.Add(this.empty_form_button);
@@ -262,6 +287,8 @@
         private System.Windows.Forms.TextBox memory_box;
         private System.Windows.Forms.CheckBox relationshipToggle;
         private System.Windows.Forms.CheckBox pathfindingToggle;
+        private System.Windows.Forms.Label cellSize_text;
+        private System.Windows.Forms.TextBox cellSize_box;
         private System.Windows.Forms.Button empty_form_button;
         private System.Windows.Forms.Button generate_button;
         private System.Windows.Forms.Label output_text;

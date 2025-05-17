@@ -13,6 +13,9 @@ namespace PathFindingClassDiagram.Services
         private readonly IDiagramLayoutStrategy _standardLayout;
         private readonly IDiagramLayoutStrategy _pathfindingLayout;
 
+        // Add properties for cell size and buffer
+        public float CellSize { get; set; } = 5f;
+
         public DiagramService()
         {
             _standardLayout = new StandardDiagramLayout();
@@ -27,7 +30,8 @@ namespace PathFindingClassDiagram.Services
             List<Models.ClassDiagram> classDiagrams,
             List<Models.Relationship> relationships,
             bool showRelationships,
-            bool usePathfinding = false
+            bool usePathfinding = false,
+            float cellSize = 5f
         )
         {
             float maxDiagramWidth = classDiagrams.Max(diagram => diagram.CalculateTotalWidth(null));
@@ -35,7 +39,7 @@ namespace PathFindingClassDiagram.Services
 
             float totalHeight = CalculateTotalHeight(classDiagrams);
             int minBitmapHeight = 640;
-            int additionalHeightPerDiagram = 96;
+            int additionalHeightPerDiagram = 76;
             int bitmapHeight = (int)Math.Max(minBitmapHeight, totalHeight + classDiagrams.Count * additionalHeightPerDiagram);
 
             Bitmap bitmap = new Bitmap(bitmapWidth, bitmapHeight);
@@ -70,7 +74,7 @@ namespace PathFindingClassDiagram.Services
                         : _standardLayout;
 
                     // Draw relationships using the selected strategy
-                    layoutStrategy.DrawRelationships(g, classDiagrams, relationships, bitmapWidth, bitmapHeight);
+                    layoutStrategy.DrawRelationships(g, classDiagrams, relationships, bitmapWidth, bitmapHeight, cellSize);
                 }
             }
 

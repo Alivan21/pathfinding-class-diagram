@@ -9,7 +9,7 @@ namespace PathFindingClassDiagram.Services.DiagramLayouts
     public class StandardDiagramLayout : IDiagramLayoutStrategy
     {
         public void DrawRelationships(Graphics g, List<ClassDiagram> classDiagrams,
-                                     List<Relationship> relationships, int bitmapWidth, int bitmapHeight)
+                                     List<Relationship> relationships, int bitmapWidth, int bitmapHeight, float cellSize)
         {
             // Extract the existing direct-line relationship drawing code from DiagramService
             Dictionary<string, ClassDiagram> classDiagramDictionary = new Dictionary<string, ClassDiagram>();

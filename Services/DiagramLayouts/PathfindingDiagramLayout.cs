@@ -10,7 +10,7 @@ namespace PathFindingClassDiagram.Services.DiagramLayouts
     public class PathfindingDiagramLayout : IDiagramLayoutStrategy
     {
         public void DrawRelationships(Graphics g, List<ClassDiagram> classDiagrams,
-                                     List<Relationship> relationships, int bitmapWidth, int bitmapHeight)
+                                     List<Relationship> relationships, int bitmapWidth, int bitmapHeight, float cellSize)
         {
             // Extract the pathfinding-based relationship drawing code from DiagramService
             Dictionary<string, ClassDiagram> classDiagramDictionary = new Dictionary<string, ClassDiagram>();
@@ -37,7 +37,8 @@ namespace PathFindingClassDiagram.Services.DiagramLayouts
                         bitmapHeight,
                         relationship.SourceClass,
                         relationship.TargetClass,
-                        5f);
+                        cellSize
+                    );
 
                     // Draw the path with appropriate styling
                     DrawConnectorPath(g, relationship.Type, routePoints);
