@@ -39,7 +39,7 @@ namespace PathFindingClassDiagram.Services
 
             float totalHeight = CalculateTotalHeight(classDiagrams);
             int minBitmapHeight = 640;
-            int additionalHeightPerDiagram = 76;
+            int additionalHeightPerDiagram = 96;
             int bitmapHeight = (int)Math.Max(minBitmapHeight, totalHeight + classDiagrams.Count * additionalHeightPerDiagram);
 
             Bitmap bitmap = new Bitmap(bitmapWidth, bitmapHeight);
