@@ -34,15 +34,21 @@ namespace PathFindingClassDiagram.Models
         public List<ClassDiagramPoint> Points { get; set; }
 
         /// <summary>
+        /// Indicates if the class is an interface
+        /// </summary>
+        public bool IsInterface { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the ClassDiagram class
         /// </summary>
-        public ClassDiagram(string className, List<string> attributes, List<string> methods, List<Relationship> relationships)
+        public ClassDiagram(string className, List<string> attributes, List<string> methods, List<Relationship> relationships, bool isInterface = false)
         {
             ClassName = className;
             Attributes = attributes ?? new List<string>();
             Methods = methods ?? new List<string>();
             Relationships = relationships ?? new List<Relationship>();
             Points = new List<ClassDiagramPoint>();
+            IsInterface = isInterface;
         }
 
         /// <summary>
@@ -58,16 +64,20 @@ namespace PathFindingClassDiagram.Models
 
             float attributesHeight = CalculateTextBlockHeight(g, Attributes);
             float methodsHeight = CalculateTextBlockHeight(g, Methods);
+            float stereotypeHeight = IsInterface ? 25f : 0f; // Height for <<Interface>> text
 
             float rectangleWidth = Math.Max(
-                g.MeasureString(ClassName, new Font("Arial", 12f)).Width + 12f * textMargin,
+                Math.Max(
+                    g.MeasureString(ClassName, new Font("Arial", 12f)).Width + 12f * textMargin,
+                    IsInterface ? g.MeasureString("<<Interface>>", new Font("Arial", 10f)).Width + 4f * textMargin : 0f
+                ),
                 Math.Max(
                     (Attributes.Count > 0) ? Attributes.Max(attr => g.MeasureString(attr, new Font("Arial", 10f)).Width) : 0f,
                     (Methods.Count > 0) ? Methods.Max(method => g.MeasureString(method, new Font("Arial", 10f)).Width + 15f) : 0f
                 )
             );
 
-            float rectangleHeight = textMargin + attributesHeight + textMargin + methodsHeight + textMargin;
+            float rectangleHeight = textMargin + stereotypeHeight + attributesHeight + textMargin + methodsHeight + textMargin;
 
             Points = new List<ClassDiagramPoint>
             {
@@ -82,26 +92,37 @@ namespace PathFindingClassDiagram.Models
 
             Rectangle classRect = new Rectangle((int)x, (int)y, (int)rectangleWidth, (int)rectangleHeight);
 
-            // Draw class name
+            // Draw class name and stereotype
             if (!string.IsNullOrEmpty(ClassName))
             {
                 g.DrawRectangle(Pens.Black, classRect);
+                float currentY = classRect.Y + textMargin;
+
+                if (IsInterface)
+                {
+                    string stereotype = "<<Interface>>";
+                    float stereotypeX = classRect.X + (classRect.Width - g.MeasureString(stereotype, new Font("Arial", 10f)).Width) / 2f;
+                    g.DrawString(stereotype, new Font("Arial", 10f), Brushes.Black, stereotypeX, currentY);
+                    currentY += stereotypeHeight;
+                }
+
                 float textX = classRect.X + (classRect.Width - g.MeasureString(ClassName, new Font("Arial", 12f)).Width) / 2f;
-                g.DrawString(ClassName, new Font("Arial", 12f), Brushes.Black, textX, classRect.Y + textMargin);
-                g.DrawLine(Pens.Black, classRect.X, classRect.Y + 30, classRect.Right, classRect.Y + 30);
+                g.DrawString(ClassName, new Font("Arial", 12f), Brushes.Black, textX, currentY);
+                g.DrawLine(Pens.Black, classRect.X, currentY + 25, classRect.Right, currentY + 25);
             }
 
             // Draw attributes
             if (Attributes.Count > 0)
             {
-                DrawTextBlock(g, classRect.Left + 10, classRect.Y + 40, Attributes, Brushes.Red);
-                g.DrawLine(Pens.Black, classRect.X, classRect.Y + 40 + attributesHeight, classRect.Right, classRect.Y + 40 + attributesHeight);
+                float attributesY = classRect.Y + 40 + (IsInterface ? stereotypeHeight : 0);
+                DrawTextBlock(g, classRect.Left + 10, attributesY, Attributes, Brushes.Red);
+                g.DrawLine(Pens.Black, classRect.X, attributesY + attributesHeight, classRect.Right, attributesY + attributesHeight);
             }
 
             // Draw methods
             if (Methods.Count > 0)
             {
-                float methodsY = classRect.Y + 40 + attributesHeight + ((Attributes.Count > 0) ? textMargin : 0f);
+                float methodsY = classRect.Y + 40 + (IsInterface ? stereotypeHeight : 0) + attributesHeight + ((Attributes.Count > 0) ? textMargin : 0f);
                 DrawTextBlock(g, classRect.Left + 10, methodsY, Methods, Brushes.DarkBlue);
             }
         }
@@ -153,8 +174,9 @@ namespace PathFindingClassDiagram.Models
             float textMargin = 10f;
             float attributesHeight = CalculateTextBlockHeight(g, Attributes);
             float methodsHeight = CalculateTextBlockHeight(g, Methods);
+            float stereotypeHeight = IsInterface ? 25f : 0f;
 
-            return textMargin + attributesHeight + textMargin + methodsHeight + textMargin;
+            return textMargin + stereotypeHeight + attributesHeight + textMargin + methodsHeight + textMargin;
         }
 
         /// <summary>
@@ -169,10 +191,11 @@ namespace PathFindingClassDiagram.Models
 
             float textMargin = 10f;
             float classNameWidth = g.MeasureString(ClassName, new Font("Arial", 12f)).Width;
+            float stereotypeWidth = IsInterface ? g.MeasureString("<<Interface>>", new Font("Arial", 10f)).Width : 0f;
             float maxAttributeWidth = (Attributes.Any() ? Attributes.Max(attr => g.MeasureString(attr, new Font("Arial", 10f)).Width) : 0f);
             float maxMethodWidth = (Methods.Any() ? Methods.Max(method => g.MeasureString(method, new Font("Arial", 10f)).Width) : 0f);
 
-            return Math.Max(classNameWidth + 12f * textMargin, Math.Max(maxAttributeWidth, maxMethodWidth));
+            return Math.Max(classNameWidth + 12f * textMargin, Math.Max(stereotypeWidth + 4f * textMargin, Math.Max(maxAttributeWidth, maxMethodWidth)));
         }
 
         /// <summary>
