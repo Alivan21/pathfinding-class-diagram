@@ -196,7 +196,7 @@ namespace PathFindingClassDiagram.Services
                         }
                     }
 
-                    // Only check for implements if it's a class
+                    // Check for implements clause
                     if (!isInterface && child.Type == "class_interface_clause")
                     {
                         foreach (var interfaceChild in child.Children)
@@ -213,6 +213,7 @@ namespace PathFindingClassDiagram.Services
                 if (!string.IsNullOrEmpty(className))
                 {
                     extractedInfo.Add($"Class: {className}");
+                    // Only set isInterface to true if it's an interface declaration, NOT for implementing classes
                     extractedInfo.Add($"IsInterface: {isInterface}");
 
                     if (!string.IsNullOrEmpty(inheritance))

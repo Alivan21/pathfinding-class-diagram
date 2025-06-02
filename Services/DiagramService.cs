@@ -100,7 +100,7 @@ namespace PathFindingClassDiagram.Services
         private int CalculateAdditionalHeightPerDiagram(List<Models.ClassDiagram> classDiagrams)
         {
             if (classDiagrams == null || classDiagrams.Count == 0)
-                return 8;
+                return 32;
 
             // Calculate average complexity based on members and relationships
             float averageComplexity = (float)classDiagrams.Average(diagram =>
@@ -114,7 +114,7 @@ namespace PathFindingClassDiagram.Services
             float averageHeight = classDiagrams.Average(diagram => diagram.CalculateTotalHeight(null));
 
             // Base height padding - scales with complexity and average height
-            int baseHeight = 8; // Minimum padding
+            int baseHeight = 32; // Minimum padding
             float complexityFactor = 8f; // Adjust how much complexity affects padding
             float heightFactor = 0.5f; // Adjust how much average height affects padding
 
@@ -123,7 +123,7 @@ namespace PathFindingClassDiagram.Services
                                       (averageHeight * heightFactor));
 
             // Ensure padding stays within reasonable bounds
-            return Math.Max(8, Math.Min(128, dynamicPadding));
+            return Math.Max(32, Math.Min(156, dynamicPadding));
         }
     }
 }
