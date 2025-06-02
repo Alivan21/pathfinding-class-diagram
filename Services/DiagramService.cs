@@ -39,7 +39,7 @@ namespace PathFindingClassDiagram.Services
 
             float totalHeight = CalculateTotalHeight(classDiagrams);
             int minBitmapHeight = 640;
-            int additionalHeightPerDiagram = 160;
+            int additionalHeightPerDiagram = CalculateAdditionalHeightPerDiagram(classDiagrams);
             int bitmapHeight = (int)Math.Max(minBitmapHeight, totalHeight + classDiagrams.Count * additionalHeightPerDiagram);
 
             Bitmap bitmap = new Bitmap(bitmapWidth, bitmapHeight);
@@ -92,6 +92,38 @@ namespace PathFindingClassDiagram.Services
                 totalHeight += classDiagram.CalculateTotalHeight(null);
             }
             return totalHeight;
+        }
+
+        /// <summary>
+        /// Calculates the dynamic height padding needed per diagram based on complexity
+        /// </summary>
+        private int CalculateAdditionalHeightPerDiagram(List<Models.ClassDiagram> classDiagrams)
+        {
+            if (classDiagrams == null || classDiagrams.Count == 0)
+                return 8;
+
+            // Calculate average complexity based on members and relationships
+            float averageComplexity = (float)classDiagrams.Average(diagram =>
+            {
+                int memberCount = (diagram.Attributes?.Count ?? 0) + (diagram.Methods?.Count ?? 0);
+                int relationshipCount = diagram.Relationships?.Count ?? 0;
+                return memberCount + relationshipCount;
+            });
+
+            // Calculate average height
+            float averageHeight = classDiagrams.Average(diagram => diagram.CalculateTotalHeight(null));
+
+            // Base height padding - scales with complexity and average height
+            int baseHeight = 8; // Minimum padding
+            float complexityFactor = 8f; // Adjust how much complexity affects padding
+            float heightFactor = 0.5f; // Adjust how much average height affects padding
+
+            int dynamicPadding = (int)(baseHeight + 
+                                      (averageComplexity * complexityFactor) + 
+                                      (averageHeight * heightFactor));
+
+            // Ensure padding stays within reasonable bounds
+            return Math.Max(8, Math.Min(128, dynamicPadding));
         }
     }
 }
