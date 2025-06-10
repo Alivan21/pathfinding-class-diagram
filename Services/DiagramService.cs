@@ -86,7 +86,7 @@ namespace PathFindingClassDiagram.Services
         /// </summary>
         private float CalculateTotalHeight(List<Models.ClassDiagram> classDiagrams)
         {
-            float totalHeight = 0f;
+            float totalHeight = 8f;
             foreach (Models.ClassDiagram classDiagram in classDiagrams)
             {
                 totalHeight += classDiagram.CalculateTotalHeight(null);
@@ -114,7 +114,7 @@ namespace PathFindingClassDiagram.Services
             float averageHeight = classDiagrams.Average(diagram => diagram.CalculateTotalHeight(null));
 
             // Base height padding - scales with complexity and average height
-            int baseHeight = 32; // Minimum padding
+            int baseHeight = 16; // Minimum padding
             float complexityFactor = 8f; // Adjust how much complexity affects padding
             float heightFactor = 0.5f; // Adjust how much average height affects padding
 
@@ -122,8 +122,7 @@ namespace PathFindingClassDiagram.Services
                                       (averageComplexity * complexityFactor) + 
                                       (averageHeight * heightFactor));
 
-            // Ensure padding stays within reasonable bounds
-            return Math.Max(32, Math.Min(156, dynamicPadding));
+            return Math.Max(32, Math.Min(128, dynamicPadding));
         }
     }
 }
